@@ -69,3 +69,36 @@
         padding: 30px 20px;
     }
 }
+.reservation-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.form-group label {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    color: #e5e7eb;
+}
+.form-group input {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 12px;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+}
+.form-group input:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+.form-row {
+    display: flex;
+    gap: 10px;
+}
