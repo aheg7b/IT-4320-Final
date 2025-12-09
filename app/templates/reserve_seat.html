@@ -30,10 +30,13 @@
                         <input type="number" min="1" max="4" placeholder="Column" />
                     </div>
                 </div>
-                <button type="button" class="menu-btn primary">Submit Reservation</button>
+                <div class="form-buttons">
+                    <button type="button" class="menu-btn primary">Submit Reservation</button>
+                    <a href="{{ url_for('main.main_menu') }}" class="menu-btn secondary" style="margin-top:20px;">⬅ Back to Main Menu</a>
+                </div>
             </form>
-            <a href="{{ url_for('main.main_menu') }}" class="menu-btn secondary" style="margin-top:20px;">⬅ Back to Main Menu</a>
+            </div>
         </div>
     </div>
 </body>
-</html>
+</html> 
