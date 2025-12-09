@@ -112,3 +112,33 @@
     margin-top: 25px;
     text-align: center;
 }
+.dashboard-section {
+    margin-top: 25px;
+    text-align: center;
+}
+.seating-chart {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+.seating-chart td {
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    text-align: center;
+    color: #e5e7eb;
+}
+.reservation-list {
+    list-style: none;
+    padding: 0;
+}
+.reservation-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 6px 0;
+    padding: 10px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+}
