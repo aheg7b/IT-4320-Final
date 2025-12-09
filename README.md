@@ -51,3 +51,5 @@ run.py — launches the Flask app
 config.py — config parameters for dev, testing, production
 requirements.txt — pinned Python package dependencies
 README.md — instructions and project info
+
+*Revised with assistance of Chat GPT to aid in cleaning and making the file clear as to what was expected
