@@ -1,6 +1,13 @@
 from flask import Blueprint, render_template, request
 from app import db
 from app.models import Admin, Reservation
+from app.crud import (
+    verify_admin_credentials,
+    get_all_reservations,
+    delete_reservation,
+    create_reservation,
+    seat_is_taken,
+)
 
 bp = Blueprint("main", __name__)
 
@@ -20,18 +27,21 @@ def admin_login():
         username = request.form.get("username")
         password = request.form.get("password")
 
-        # Look up admin in the DB
-        admin = Admin.query.filter_by(username=username).first()
-
-        if admin and admin.password == password:
-            # credentials OK – show admin dashboard
-            return render_template("admin_dashboard.html")
+        admin = verify_admin_credentials(username, password)
+        if admin:
+            # For now, just load dashboard after login
+            reservations = get_all_reservations()
+            return render_template(
+                "admin_dashboard.html",
+                admin=admin,
+                reservations=reservations,
+                total_sales=0,  # we'll calculate this properly later
+            )
         else:
-            #  wrong username or password
             error = "Invalid credentials"
-
-    # GET request or failed POST → show login form
+            
     return render_template("admin_login.html", error=error)
+
 
 @bp.route("/init_admin")
 def init_admin():
