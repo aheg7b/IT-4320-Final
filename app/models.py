@@ -1,26 +1,29 @@
-# app/models.py
+from datetime import datetime
 from app import db
 
-class Reservation(db.Model):
-    __tablename__ = "reservations"   
 
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=False)
-    row = db.Column(db.Integer, nullable=False)
-    col = db.Column(db.Integer, nullable=False)
-    code = db.Column(db.String(50), nullable=False, unique=True)
+class Reservation(db.Model):
+    __tablename__ = "reservations"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    passengerName = db.Column(db.String, nullable=False)
+    seatRow = db.Column(db.Integer, nullable=False)
+    seatColumn = db.Column(db.Integer, nullable=False)
+    eTicketNumber = db.Column(db.String, nullable=False, unique=True)
+    created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
-        return f"<Reservation {self.first_name} {self.last_name} seat=({self.row},{self.col})>"
+        return (
+            f"<Reservation {self.passengerName} "
+            f"seat=({self.seatRow},{self.seatColumn}) code={self.eTicketNumber}>"
+        )
 
 
 class Admin(db.Model):
-    __tablename__ = "admins"  
+    __tablename__ = "admins"
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), nullable=False, unique=True)
-    password = db.Column(db.String(128), nullable=False)  
+    username = db.Column(db.String, primary_key=True)
+    password = db.Column(db.String, nullable=False)
 
     def __repr__(self):
         return f"<Admin {self.username}>"
