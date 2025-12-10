@@ -11,7 +11,7 @@ def create_app():
     )
     db.init_app(app)
     #import and register blueprints/routes here
-    from . import routes
+    from . import routes, models
     app.register_blueprint(routes.bp)
     #creates db if needed
     with app.app_context():
