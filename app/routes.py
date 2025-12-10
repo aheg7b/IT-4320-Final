@@ -42,7 +42,6 @@ def admin_login():
             
     return render_template("admin_login.html", error=error)
 
-
 @bp.route("/init_admin")
 def init_admin():
     # Check if an admin already exists
@@ -55,4 +54,3 @@ def init_admin():
     db.session.add(admin)
     db.session.commit()
     return "Admin created with username=admin, password=admin"
-
