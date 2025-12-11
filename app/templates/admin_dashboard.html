@@ -10,9 +10,9 @@
     <div class="menu-container">
         <div class="menu-card">
             <h1 class="menu-title">Admin Dashboard</h1>
-            <p class="menu-subtitle">View seating chart and sales summary (visual only)</p>
+            <p class="menu-subtitle">View seating chart and sales summary</p>
             <div class="dashboard-section">
-                <h2>Total Sales: $0.00</h2>
+                <h2>Total Sales: ${{ total_sales }}</h2>
             </div>
             <div class="dashboard-section">
                 <h2>Seating Chart</h2>
@@ -29,12 +29,60 @@
             <div class="dashboard-section">
                 <h2>Reservations</h2>
                 <ul class="reservation-list">
-                    <li>John Doe - Seat 1A - $100 <button class="menu-btn secondary">Delete</button></li>
-                    <li>Jane Smith - Seat 2B - $75 <button class="menu-btn secondary">Delete</button></li>
+                    {% for r in reservations %}
+                    <li>{{ r.name }} - Seat {{ r.seat }} - ${{ r.price }}
+                        <form action="{{ url_for('main.delete_reservation', reservation_id=r.id) }}" method="POST" style="display:inline;">
+                            <button class="menu-btn secondary">Delete</button>
+                        </form>
+                    </li>
+                    {% endfor %}
                 </ul>
             </div>
-            <a href="{{ url_for('main.main_menu') }}" class="menu-btn secondary">⬅ Back to Main Menu</a>
+            <div class="dashboard-section">
+                <button id="openModalBtn" class="menu-btn primary">Add Admin</button>
+            </div>
+            <div id="addAdminModal" class="modal">
+                <div class="modal-content">
+                    <span id="closeModalBtn" class="close-btn">&times;</span>
+                    <h2>Add Admin User</h2>
+                    <form method="POST" action="{{ url_for('main.add_admin') }}" class="reservation-form">
+                        <div class="form-group">
+                            <label for="new_username">Username</label>
+                            <input type="text" id="new_username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new_password">Password</label>
+                            <input type="password" id="new_password" name="password" required>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="menu-btn primary">Create Admin</button>
+                        </div>
+                    </form>
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="dashboard-section mt-3">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+            <div class="dashboard-section back-button-container">
+                <a href="{{ url_for('main.main_menu') }}" class="menu-btn secondary">Back to Main Menu</a>
+            </div>
         </div>
     </div>
+    <script>
+        const modal = document.getElementById("addAdminModal");
+        const openBtn = document.getElementById("openModalBtn");
+        const closeBtn = document.getElementById("closeModalBtn");
+        openBtn.onclick = () => modal.style.display = "block";
+        closeBtn.onclick = () => modal.style.display = "none";
+        window.onclick = (event) => {
+            if (event.target == modal) modal.style.display = "none";
+        }
+    </script>
 </body>
 </html>

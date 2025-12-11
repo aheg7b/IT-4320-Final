@@ -1,7 +1,7 @@
 # app/crud.py
 from app import db
 from app.models import Admin, Reservation
-
+from werkzeug.security import check_password_hash
 
 # ---------- Admin helpers ----------
 
@@ -15,8 +15,8 @@ def verify_admin_credentials(username: str, password: str):
     Return the Admin row if username/password match,
     otherwise return None.
     """
-    admin = get_admin_by_username(username)
-    if admin and admin.password == password:
+    admin = Admin.query.filter_by(username=username).first()
+    if admin and check_password_hash(admin.password, password):
         return admin
     return None
 

@@ -62,3 +62,20 @@ def init_admin():
         flash("Admin created successfully!", "success")
         return redirect(url_for("main.admin_login"))
     return render_template("init_admin.html")
+
+@bp.route("/admin/add", methods=["POST"])
+def add_admin():
+    username = request.form.get("username")
+    password = request.form.get("password")
+    if not username or not password:
+        flash("Please provide both username and password.", "danger")
+        return redirect(url_for("main.admin_login"))
+    existing = Admin.query.filter_by(username=username).first()
+    if existing:
+        flash("Username already exists.", "warning")
+        return redirect(url_for("main.admin_login"))
+    admin = Admin(username=username, password=generate_password_hash(password))
+    db.session.add(admin)
+    db.session.commit()
+    flash(f"Admin '{username}' created successfully!", "success")
+    return redirect(url_for("main.admin_login"))
