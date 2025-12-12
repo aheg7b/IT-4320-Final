@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash
-from app import app, db
-from app.forms import ReservationForm
-from app.models import Admin, Reservation
-from app.utils import generate_eticket_code
-from app.crud import (
+from . import db
+from .forms import ReservationForm
+from .models import Admin, Reservation
+from .utils import ETicketGenerator
+from .crud import (
     verify_admin_credentials,
     get_all_reservations,
     delete_reservation,
@@ -14,11 +14,16 @@ from app.crud import (
 
 bp = Blueprint("main", __name__)
 
-@app.route('/reserve', methods=['GET', 'POST'])
+@bp.route('/')
+def main_menu():
+    return render_template('main_menu.html')
+
+@bp.route('/reserve', methods=['GET', 'POST'])
 def reserve_seat():
     form = ReservationForm()
     if form.validate_on_submit():
-        eticket = generate_eticket_code()
+        generator = ETicketGenerator(length=6)
+        eticket = generator.generate()
         new_reservation = Reservation(
             passengerName=form.name.data,
             seatRow=form.seat_row.data,
@@ -39,29 +44,24 @@ def reserve_seat():
 @bp.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
     error = None
-
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-
         admin = verify_admin_credentials(username, password)
         if admin:
-            # For now, just load dashboard after login
             reservations = get_all_reservations()
             return render_template(
                 "admin_dashboard.html",
                 admin=admin,
                 reservations=reservations,
-                total_sales=0,  # we'll calculate this properly later
+                total_sales=0,
             )
         else:
             error = "Invalid credentials"
-            
     return render_template("admin_login.html", error=error)
 
 @bp.route("/init_admin", methods=["GET", "POST"])
 def init_admin():
-    # Check if an admin already exists
     existing = Admin.query.first()
     if existing:
         flash("Admin already exists.", "warning")
