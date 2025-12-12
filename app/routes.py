@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash
 from app import app, db
 from app.forms import ReservationForm
 from app.models import Admin, Reservation
-from app.utils import generate_reservation_code
+from app.utils import generate_eticket_code
 from app.crud import (
     verify_admin_credentials,
     get_all_reservations,
@@ -18,20 +18,23 @@ bp = Blueprint("main", __name__)
 def reserve_seat():
     form = ReservationForm()
     if form.validate_on_submit():
-        reservation_code = generate_reservation_code()
+        eticket = generate_eticket_code()
         new_reservation = Reservation(
-            name=form.name.data,
-            seat_number=form.seat_number.data,
-            code=reservation_code
+            passengerName=form.name.data,
+            seatRow=form.seat_row.data,
+            seatColumn=form.seat_column.data,
+            eTicketNumber=eticket
         )
         db.session.add(new_reservation)
         db.session.commit()
-        return render_template('confirmation.html', code=reservation_code, name=form.name.data, seat=form.seat_number.data)
+        return render_template(
+            'confirmation.html',
+            name=form.name.data,
+            row=form.seat_row.data,
+            column=form.seat_column.data,
+            eticket=eticket
+        )
     return render_template('reserve_seat.html', form=form)
-
-@bp.route("/reserve")
-def reserve_seat():
-    return render_template("reserve_seat.html")
 
 @bp.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
