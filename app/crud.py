@@ -1,14 +1,10 @@
-# app/crud.py
 from app import db
 from app.models import Admin, Reservation
 from werkzeug.security import check_password_hash
 
-# ---------- Admin helpers ----------
-
 def get_admin_by_username(username: str):
     """Return the Admin row for a username, or None."""
     return Admin.query.filter_by(username=username).first()
-
 
 def verify_admin_credentials(username: str, password: str):
     """
@@ -20,19 +16,14 @@ def verify_admin_credentials(username: str, password: str):
         return admin
     return None
 
-
-# ---------- Reservation helpers ----------
-
 def get_all_reservations():
     """Return a list of all reservations ordered by id."""
     return Reservation.query.order_by(Reservation.id).all()
-
 
 def seat_is_taken(row: int, col: int) -> bool:
     """Return True if a seat (row, col) already has a reservation."""
     existing = Reservation.query.filter_by(row=row, col=col).first()
     return existing is not None
-
 
 def create_reservation(first_name: str,
                        last_name: str,
@@ -53,7 +44,6 @@ def create_reservation(first_name: str,
     db.session.add(reservation)
     db.session.commit()
     return reservation
-
 
 def delete_reservation(reservation_id: int) -> bool:
     """
