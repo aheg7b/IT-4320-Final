@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash
-from app import db
+from app import app, db
+from app.forms import ReservationForm
 from app.models import Admin, Reservation
+from app.utils import generate_reservation_code
 from app.crud import (
     verify_admin_credentials,
     get_all_reservations,
@@ -12,9 +14,20 @@ from app.crud import (
 
 bp = Blueprint("main", __name__)
 
-@bp.route("/")
-def main_menu():
-    return render_template("main_menu.html")
+@app.route('/reserve', methods=['GET', 'POST'])
+def reserve_seat():
+    form = ReservationForm()
+    if form.validate_on_submit():
+        reservation_code = generate_reservation_code()
+        new_reservation = Reservation(
+            name=form.name.data,
+            seat_number=form.seat_number.data,
+            code=reservation_code
+        )
+        db.session.add(new_reservation)
+        db.session.commit()
+        return render_template('confirmation.html', code=reservation_code, name=form.name.data, seat=form.seat_number.data)
+    return render_template('reserve_seat.html', form=form)
 
 @bp.route("/reserve")
 def reserve_seat():
