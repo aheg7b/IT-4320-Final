@@ -184,3 +184,66 @@
 .dashboard-section:last-child{
     margin-bottom: 20px;
 }
+.confirmation-card {
+    max-width: 500px;
+    margin-top: 50px;
+    border: 2px solid #28a745;
+}
+.success-header {
+    background-color: #28a745; 
+    color: white;
+    font-size: 1.6em;
+    padding: 15px;
+    text-align: center;
+}
+.confirmation-body {
+    padding: 20px;
+}
+.success-message {
+    font-size: 1.1em;
+    color: #383d41;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 1px dashed #ced4da;
+    padding-bottom: 15px;
+}
+.reservation-details {
+    padding: 15px;
+    background-color: #f8f9fa; 
+    border-radius: 5px;
+}
+.detail-group {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+.detail-label {
+    font-weight: 500;
+    color: #495057;
+}
+.detail-value {
+    font-weight: 400;
+    color: #212529;
+}
+.reservation-code-row {
+    padding-top: 20px;
+    margin-top: 10px;
+    border-top: 1px solid #dee2e6;
+}
+.code-label {
+    font-weight: 700;
+    color: #007bff; 
+    font-size: 1.1em;
+}
+.code-value strong {
+    font-size: 1.4em;
+    color: #dc3545; 
+    background-color: #fff3cd; 
+    padding: 5px 10px;
+    border-radius: 4px;
+    letter-spacing: 2px;
+}
+.return-btn {
+    margin-top: 25px;
+    width: 100%;
+}
