@@ -53,7 +53,8 @@ def confirmation():
         last_name=reservation.lastName,
         row=reservation.seatRow,
         column=reservation.seatColumn,
-        eticket=reservation.eTicketNumber
+        eticket=reservation.eTicketNumber,
+        price=get_seat_price(reservation.seatRow, reservation.seatColumn)
     )
 
 

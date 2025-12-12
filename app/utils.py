@@ -19,11 +19,7 @@ def get_seat_price(row: int, col: int) -> int:
 
 def calculate_total_sales(reservations: list[Reservation]) -> float:
     """Calculates the total sales collected from a list of reservations (Req G)."""
-    total = 0.0
-    for res in reservations:
-        price = get_seat_price(res.seatRow, res.seatColumn)
-        total += price
-    return total
+    return sum(get_seat_price(res.seatRow, res.seatColumn) for res in reservations)
 
 class ETicketGenerator:
     def __init__(self, length=6):

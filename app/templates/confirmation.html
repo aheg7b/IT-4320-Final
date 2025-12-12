@@ -11,11 +11,15 @@
             <div class="reservation-details">
                 <div class="detail-group">
                     <span class="detail-label">Passenger Name:</span>
-                    <span class="detail-value">{{ first_name }} {{ last_name }}</span> 
+                    <span class="detail-value">{{ first_name }} {{ last_name }}</span>
                 </div>
                 <div class="detail-group">
                     <span class="detail-label">Seat:</span>
                     <span class="detail-value">{{ row }}-{{ column }}</span>
+                </div>
+                <div class="detail-group">
+                    <span class="detail-label">Price:</span>
+                    <span class="detail-value">${{ price }}</span>
                 </div>
                 <div class="detail-group reservation-code-row">
                     <span class="detail-label code-label">e-Ticket Number:</span>
