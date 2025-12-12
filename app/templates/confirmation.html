@@ -3,12 +3,12 @@
 {% block title %}Reservation Confirmed{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="form-card confirmation-card">
-        <h2 class="form-header success-header">Reservation Successful!</h2>
+<div class="menu-container">
+    <div class="menu-card confirmation-card">
+        <h2 class="menu-title success-header">Reservation Successful!</h2>
         
         <div class="card-body confirmation-body">
-            <p class="success-message">
+            <p class="menu-subtitle success-message">
                 Your seat has been successfully reserved. Please save your **e-Ticket Number** for future reference.
             </p>
 
@@ -27,9 +27,11 @@
                 </div>
             </div>
 
-            <a href="{{ url_for('main.main_menu') }}" class="btn btn-secondary return-btn">
-                Return to Main Menu
-            </a>
+            <div class="form-buttons">
+                <a href="{{ url_for('main.main_menu') }}" class="menu-btn secondary return-btn">
+                    ⬅ Return to Main Menu
+                </a>
+            </div>
         </div>
     </div>
 </div>
