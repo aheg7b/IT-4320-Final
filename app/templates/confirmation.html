@@ -1,21 +1,17 @@
 {% extends "base.html" %}
-
 {% block title %}Reservation Confirmed{% endblock %}
-
 {% block content %}
 <div class="menu-container">
     <div class="menu-card confirmation-card">
         <h2 class="menu-title success-header">Reservation Successful!</h2>
-        
         <div class="card-body confirmation-body">
             <p class="menu-subtitle success-message">
-                Your seat has been successfully reserved. Please save your **e-Ticket Number** for future reference.
+                Your seat has been successfully reserved. Please save your E-Ticket Number for future reference.
             </p>
-
             <div class="reservation-details">
                 <div class="detail-group">
                     <span class="detail-label">Passenger Name:</span>
-                    <span class="detail-value">{{ name }}</span>
+                    <span class="detail-value">{{ first_name }} {{ last_name }}</span> 
                 </div>
                 <div class="detail-group">
                     <span class="detail-label">Seat:</span>
@@ -26,7 +22,6 @@
                     <span class="detail-value code-value"><strong>{{ eticket }}</strong></span>
                 </div>
             </div>
-
             <div class="form-buttons">
                 <a href="{{ url_for('main.main_menu') }}" class="menu-btn secondary return-btn">
                     ⬅ Return to Main Menu

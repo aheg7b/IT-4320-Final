@@ -1,10 +1,12 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from builtins import chr
 
 db = SQLAlchemy()
 def create_app():
     app = Flask(__name__, instance_relative_config=False)
+    app.jinja_env.globals.update(chr=chr)
     app.config.from_mapping(
         SECRET_KEY=os.environ.get("SECRET_KEY", "dev-secret-key"),
         SQLALCHEMY_DATABASE_URI=os.environ.get(

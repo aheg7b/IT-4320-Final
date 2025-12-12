@@ -22,7 +22,7 @@ def get_all_reservations():
 
 def seat_is_taken(row: int, col: int) -> bool:
     """Return True if a seat (row, col) already has a reservation."""
-    existing = Reservation.query.filter_by(row=row, col=col).first()
+    existing = Reservation.query.filter_by(seatRow=row, seatColumn=col).first()
     return existing is not None
 
 def create_reservation(first_name: str,
@@ -31,15 +31,15 @@ def create_reservation(first_name: str,
                        col: int,
                        code: str):
     """
-    Create and save a new reservation.
+    Create and save a new reservation (Req I).
     Returns the created Reservation object.
     """
     reservation = Reservation(
-        first_name=first_name,
-        last_name=last_name,
-        row=row,
-        col=col,
-        code=code,
+        firstName=first_name,
+        lastName=last_name,
+        seatRow=row,
+        seatColumn=col,
+        eTicketNumber=code,
     )
     db.session.add(reservation)
     db.session.commit()
@@ -47,13 +47,12 @@ def create_reservation(first_name: str,
 
 def delete_reservation(reservation_id: int) -> bool:
     """
-    Delete a reservation by id.
+    Delete a reservation by id (Req D).
     Returns True if deleted, False if not found.
     """
     reservation = Reservation.query.get(reservation_id)
     if not reservation:
         return False
-
     db.session.delete(reservation)
     db.session.commit()
     return True
