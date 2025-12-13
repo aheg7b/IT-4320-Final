@@ -2,9 +2,16 @@ ROWS = 12
 COLS = 4
 COL_LABELS = ["A", "B", "C", "D"]
 
+# Define the cost matrix as a constant to avoid recreating it multiple times.
+# Using a list comprehension logic equivalent to the original:
+# top row is index 0. user row 1 is index 0.
+# Original logic: [[100, 75, 50, 100] for _ in range(ROWS)]
+COST_MATRIX = [[100, 75, 50, 100] for _ in range(ROWS)]
+
 
 def get_cost_matrix():
-    return [[100, 75, 50, 100] for _ in range(ROWS)]
+    """Returns the cost matrix."""
+    return COST_MATRIX
 
 
 def print_cost_matrix(matrix):
@@ -38,8 +45,8 @@ def parse_seat_code(seat_code):
         raise ValueError("Row must be a number (1-12).")
 
     row_num = int(row_part)
-    if row_num < 1 or row_num > ROWS:
-        raise ValueError("Row out of range (1-12).")
+    if not (1 <= row_num <= ROWS):
+        raise ValueError(f"Row out of range (1-{ROWS}).")
 
     if col_part not in COL_LABELS:
         raise ValueError("Column must be A, B, C, or D.")
@@ -48,10 +55,10 @@ def parse_seat_code(seat_code):
 
 
 def seat_rowcol_to_code(row_num, col_num):
-    if row_num < 1 or row_num > ROWS:
-        raise ValueError("Row out of range (1-12).")
-    if col_num < 1 or col_num > COLS:
-        raise ValueError("Column out of range (1-4).")
+    if not (1 <= row_num <= ROWS):
+        raise ValueError(f"Row out of range (1-{ROWS}).")
+    if not (1 <= col_num <= COLS):
+        raise ValueError(f"Column out of range (1-{COLS}).")
 
     return f"{row_num}{COL_LABELS[col_num - 1]}"
 
@@ -62,8 +69,10 @@ def get_seat_price_by_code(matrix, seat_code):
 
 
 def get_seat_price_by_rowcol(matrix, row_num, col_num):
-    seat_code = seat_rowcol_to_code(row_num, col_num)
-    return get_seat_price_by_code(matrix, seat_code)
+    # This can be optimized to access matrix directly without string conversion
+    if not (1 <= row_num <= ROWS) or not (1 <= col_num <= COLS):
+         raise ValueError("Invalid row or column")
+    return matrix[row_num - 1][col_num - 1]
 
 
 def main():

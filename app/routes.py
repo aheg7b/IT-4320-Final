@@ -3,12 +3,13 @@ from werkzeug.security import generate_password_hash
 from . import db
 from .forms import ReservationForm, AdminLoginForm 
 from .models import Admin, Reservation
-from .utils import ETicketGenerator, calculate_total_sales, get_seat_price
+from .utils import ETicketGenerator, get_seat_price, format_dashboard_data
 from .crud import (
     verify_admin_credentials,
     get_all_reservations,
     delete_reservation,
     seat_is_taken,
+    create_reservation,
 )
 
 bp = Blueprint("main", __name__)
@@ -26,17 +27,18 @@ def reserve_seat():
         if seat_is_taken(row, col):
             flash(f"Seat Row {row}, Column {col} is already reserved. Please select another seat.", "danger")
             return render_template('reserve_seat.html', form=form)
+        
         generator = ETicketGenerator(length=6)
         eticket = generator.generate()
-        new_reservation = Reservation(
-            firstName=form.firstName.data,
-            lastName=form.lastName.data,
-            seatRow=row,
-            seatColumn=col,
-            eTicketNumber=eticket
+        
+        create_reservation(
+            first_name=form.firstName.data,
+            last_name=form.lastName.data,
+            row=row,
+            col=col,
+            code=eticket
         )
-        db.session.add(new_reservation)
-        db.session.commit()
+        
         return redirect(url_for('main.confirmation', eticket=eticket))
     return render_template('reserve_seat.html', form=form)
 
@@ -68,6 +70,8 @@ def admin_login():
             return redirect(url_for('main.admin_dashboard'))
         else:
             flash("Invalid username or password.", "danger")
+    
+    # Check if any admin exists, if not redirect to init
     if not Admin.query.first():
         return redirect(url_for('main.init_admin'))
 
@@ -76,35 +80,15 @@ def admin_login():
 @bp.route("/admin/dashboard", methods=["GET"])
 def admin_dashboard():
     reservations_db = get_all_reservations()
-    total_sales = calculate_total_sales(reservations_db)
-    SEAT_ROWS = 12
-    SEAT_COLS = 4
-    seat_map = [[None] * SEAT_COLS for _ in range(SEAT_ROWS)]
-    reservations_for_display = []
+    data = format_dashboard_data(reservations_db)
     
-    for res in reservations_db:
-        price = get_seat_price(res.seatRow, res.seatColumn)
-        if 1 <= res.seatRow <= SEAT_ROWS and 1 <= res.seatColumn <= SEAT_COLS:
-            seat_map[res.seatRow - 1][res.seatColumn - 1] = {
-                'id': res.id,
-                'name': f"{res.firstName} {res.lastName}",
-                'code': res.eTicketNumber,
-                'price': price
-            }
-        reservations_for_display.append({
-            'id': res.id,
-            'name': f"{res.firstName} {res.lastName}",
-            'seat': f"{res.seatRow}{chr(64 + res.seatColumn)}",
-            'code': res.eTicketNumber,
-            'price': price
-        })
     return render_template(
         'admin_dashboard.html',
-        reservations=reservations_for_display,
-        total_sales=total_sales,
-        seat_map=seat_map,
-        SEAT_ROWS=SEAT_ROWS,
-        SEAT_COLS=SEAT_COLS
+        reservations=data['formatted_reservations'],
+        total_sales=data['total_sales'],
+        seat_map=data['seat_map'],
+        SEAT_ROWS=data['rows'],
+        SEAT_COLS=data['cols']
     )
 
 @bp.route('/delete/<int:reservation_id>', methods=['POST'])
